@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/basic_details"
+            android:textSize="18sp"
+            android:textColor="@color/baseColor"/>
+
+        <include
+            android:id="@+id/txt_year"
+            layout="@layout/text_input"
+            bind:textInputHint="@{@string/year}"/>
+
+        <Spinner
+            android:id="@+id/spinner_areaProvince"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_material"
+            android:entries="@array/mobileProvinceList"/>
+        <Spinner
+            android:id="@+id/spinner_areaCity"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_material"/>
+
+        <include
+            android:id="@+id/txt_mCompany"
+            layout="@layout/text_input"
+            bind:textInputHint="@{@string/motherCompany}"/>
+
+        <include
+            android:id="@+id/txt_nameCompany"
+            layout="@layout/text_input"
+            bind:textInputHint="@{@string/nameCompany}"/>
+
+        <include
+            android:id="@+id/txt_address"
+            layout="@layout/text_input"
+            bind:textInputHint="@{@string/address}"/>
+
+        <Spinner
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_material"
+            android:entries="@array/industryTypeArray"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,0 +1,8 @@
+package com.example.eis.ui.utils
+
+object Constants {
+    val PREFS_KEY = "EIS_PREFS_KEY"
+    val GENERAL_INFORMATION_MOBILE = "GENERAL_INFORMATION_MOBILE"
+    val GENERAL_INFORMATION_AREA = "GENERAL_INFORMATION_AREA"
+
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.main.StationaryActivity">
+    
+    <LinearLayout
+        android:paddingVertical="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_iconback"
+            android:paddingHorizontal="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:textAlignment="center"
+            android:textColor="@color/baseColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/stationary"/>
+        <View
+            android:id="@+id/btn_addStationary"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingHorizontal="10dp"
+            android:layout_weight="1"
+            android:background="@color/white"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <include
+            android:layout_weight="6"
+            android:id="@+id/stationary_list"
+            layout="@layout/stationary_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+        <Button
+            android:layout_marginHorizontal="20dp"
+            android:id="@+id/addBtn"
+            android:backgroundTint="@color/altColor"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:text="@string/addStationary"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

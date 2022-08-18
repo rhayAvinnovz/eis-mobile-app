@@ -1,0 +1,329 @@
+<resources>
+    <string name="app_name">EIS</string>
+    <string name="title">DENR Emission Inventory App</string>
+
+    <!--General-->
+    <string name="welcome">Welcome back,</string>
+    <string name="pleaseSelect">Please select a source to continue</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+
+    <!--General Buttons-->
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="addStationary">Add Stationary</string>
+    <string name="addMobile">Add Mobile</string>
+    <string name="addArea">Add Area</string>
+
+    <!--Form Indicators-->
+    <string name="indicator_one">1</string>
+    <string name="indicator_two">2</string>
+
+    <!--Main Sources-->
+    <string name="stationary">Stationary</string>
+    <string name="mobile">Mobile</string>
+    <string name="area">Area</string>
+
+    <!--Main Headers-->
+    <string name="stationaryFormHeader">ADD STATIONARY</string>
+    <string name="mobileFormHeader">ADD MOBILE</string>
+    <string name="areaFormHeader">ADD AREA</string>
+
+    <string name="stationaryFormAddEdit">STATIONARY FILL UP FORM</string>
+    <string name="mobileFormAddEdit">MOBILE FILL UP FORM</string>
+    <string name="areaFormAddEdit">AREA FILL UP FORM</string>
+
+    <!--Stationary Buttons-->
+    <string name="submitStationary">Submit Stationary</string>
+    <string name="addApsi">Add APSI</string>
+    <string name="addApcd">Add APCD</string>
+    <string name="addPlant">Add Plant</string>
+
+    <!--Stationary Labels-->
+    <string name="basic_details">Basic Details</string>
+    <string name="plant_details">Plant Details</string>
+    <string name="apsi">APSI</string>
+    <string name="year">Year</string>
+    <string name="cityMunicipality">City/Municipality</string>
+    <string name="rt_fare">Road Thorough Fare</string>
+    <string name="motherCompany">Mother Company</string>
+    <string name="nameCompany">Name of Company</string>
+    <string name="address">Address</string>
+    <string name="industryType">Industry Type</string>
+    <string name="plantName">Plant Name</string>
+    <string name="plantAddress">Plant Address</string>
+    <string name="apsiTypeLabel">APSI Type</string>
+    <string name="apsiCapacity">APSI Capacity</string>
+    <string name="utmEasting">UTM Easting</string>
+    <string name="utmNorthing">UTM Northing</string>
+    <string name="fuelType">Fuel Type</string>
+    <string name="fuelRate">Fuel Rate(L/Hr,L/day)</string>
+    <string name="fuelConsumption">Fuel Consumption</string>
+    <string name="unit">Unit</string>
+    <string name="noOperatingHours">No. of Operating Hours</string>
+    <string name="apcd">APCD</string>
+    <string name="apcdEff">APCD Efficiency(%)</string>
+    <string name="co">CO (TONS/year)</string>
+    <string name="nox">NOX (TONS/year)</string>
+    <string name="pm">PM (TONS/year)</string>
+    <string name="sox">SOx (TONS/year)</string>
+    <string name="voc">VOC (TONS/year)</string>
+
+    <!--Stationary Drop List-->
+    <string-array name="cityBukidnon">
+        <item>BAUNGON</item>
+        <item>DAMULOG</item>
+        <item>DANGCAGAN</item>
+        <item>DON CARLOS</item>
+        <item>IMPASUG-ONG</item>
+        <item>KADINGILAN</item>
+        <item>KALILANGAN</item>
+        <item>KIBAWE</item>
+        <item>KITAOTAO</item>
+        <item>LANTAPAN</item>
+        <item>LIBONA</item>
+        <item>CITY OF MALAYBALAY (Capital)</item>
+        <item>MALITBOG</item>
+        <item>MANOLO FORTICH</item>
+        <item>MARAMAG</item>
+        <item>PANGANTUCAN</item>
+        <item>PANGANTUCAN</item>
+        <item>PANGANTUCAN</item>
+        <item>PANGANTUCAN</item>
+        <item>PANGANTUCAN</item>
+        <item>CITY OF VALENCIA</item>
+        <item>CABANGLASAN</item>
+    </string-array>
+
+    <string-array name="cityCamiguin">
+        <item>CATARMAN</item>
+        <item>GUINSILIBAN</item>
+        <item>MAHINOG</item>
+        <item>MAMBAJAO (Capital)</item>
+        <item>SAGAY</item>
+    </string-array>
+
+    <string-array name="cityLanao">
+        <item>BACOLOD</item>
+        <item>BALOI</item>
+        <item>BAROY</item>
+        <item>ILIGAN CITY</item>
+        <item>KAPATAGAN</item>
+        <item>SULTAN NAGA DIMAPORO (KAROMATAN)</item>
+        <item>KAUSWAGAN</item>
+        <item>KOLAMBUGAN</item>
+        <item>LALA</item>
+        <item>LINAMON</item>
+        <item>MAGSAYSAY</item>
+        <item>MAIGO</item>
+        <item>MATUNGAO</item>
+        <item>MUNAI</item>
+        <item>NUNUNGAN</item>
+        <item>PANTAO RAGAT</item>
+        <item>POONA PIAGAPO</item>
+        <item>SALVADOR</item>
+        <item>SAPAD</item>
+        <item>TAGOLOAN</item>
+        <item>TANGCAL</item>
+        <item>TUBOD (Capital)</item>
+        <item>PANTAR</item>
+    </string-array>
+
+    <string-array name="cityOccidental">
+        <item>ALORAN</item>
+        <item>BALIANGAO</item>
+        <item>BONIFACIO</item>
+        <item>CALAMBA</item>
+        <item>CLARIN</item>
+        <item>CONCEPCION</item>
+        <item>JIMENEZ</item>
+        <item>LOPEZ JAENA</item>
+        <item>OROQUIETA CITY (Capital)</item>
+        <item>OZAMIS CITY</item>
+        <item>PANAON</item>
+        <item>PLARIDEL</item>
+        <item>SAPANG DALAGA</item>
+        <item>SINACBAN</item>
+        <item>TANGUB CITY</item>
+        <item>TUDELA</item>
+        <item>DON VICTORIANO CHIONGBIAN (DON MARIANO MARCOS)</item>
+    </string-array>
+
+    <string-array name="cityOriental">
+        <item>ALUBIJID</item>
+        <item>BALINGASAG</item>
+        <item>BALINGOAN</item>
+        <item>BINUANGAN</item>
+        <item>CAGAYAN DE ORO CITY (Capital)</item>
+        <item>CLAVERIA</item>
+        <item>CITY OF EL SALVADOR</item>
+        <item>GINGOOG CITY</item>
+        <item>GITAGUM</item>
+        <item>INITAO</item>
+        <item>JASAAN</item>
+        <item>KINOGUITAN</item>
+        <item>LAGONGLONG</item>
+        <item>LAGUINDINGAN</item>
+        <item>LIBERTAD</item>
+        <item>LUGAIT</item>
+        <item>MAGSAYSAY (LINUGOS)</item>
+        <item>MANTICAO</item>
+        <item>MEDINA</item>
+        <item>NAAWAN</item>
+        <item>OPOL</item>
+        <item>SANAY</item>
+        <item>SUGBONGCOGON</item>
+        <item>TAGOLOAN</item>
+        <item>TALISAYAN</item>
+        <item>VILLANUEVA</item>
+    </string-array>
+
+    <string-array name="industryTypeArray">
+        <item>Heavy Industries</item>
+        <item>Non-Ferrous Metal</item>
+        <item>Iron and Steel Mills</item>
+        <item>Petroleum and Petrochemical</item>
+        <item>Smelting Plants</item>
+        <item>Chemical Industries</item>
+        <item>Agriculture, Food, and Related Industries</item>
+        <item>Other Processing and Manufacturing Industries</item>
+        <item>Mining and Quarrying projects</item>
+        <item>Forestry Projects</item>
+        <item>Fishery Projects - Dikes for/and Fishpond Development Projects</item>
+        <item>Dams, Water Supply, and Flood Control Project</item>
+        <item>Power Plants</item>
+        <item>Reclamation and Other Land Restoration Projects</item>
+        <item>Roads and Bridges</item>
+        <item>Other Transport Facilities</item>
+        <item>Building including Housing, Storage Facilities and Other Structures</item>
+        <item>Pipeline and Similar Projects</item>
+        <item>Waste Management Projects</item>
+        <item>Golf Course and Other Tourism Projects</item>
+        <item>Resort and Other Tourism or Leisure Projects</item>
+        <item>Cut-flower Industry or Projects</item>
+        <item>Telecommunication Projects</item>
+        <item>Facilities for Barangay Micro-Business Enterprises Projects</item>
+        <item>Energy Projects and Non-commercial Mineral and Fossil Mining Projects</item>
+        <item>Retesting Existing Wells in Indigenous Energy Resource Locations</item>
+        <item>Cottage Industries</item>
+        <item>Service Industries</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="apsiType">
+        <item>Boiler</item>
+        <item>Generator</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="fuelType">
+        <item>Gas</item>
+        <item>Diesel</item>
+        <item>Bunker Fuel</item>
+        <item>Coal</item>
+        <item>Bagasse</item>
+        <item>Wood</item>
+        <item>Textile</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="unitType">
+        <item>kg</item>
+        <item>tons</item>
+        <item>gallon</item>
+        <item>litre</item>
+    </string-array>
+
+    <string-array name="apcdType">
+        <item>Mechanical Shaker</item>
+        <item>Pulse-jet</item>
+        <item>Plate-wire</item>
+        <item>Flat-Plate</item>
+        <item>Tubular Precipitator</item>
+        <item>Two Stage Precipitator</item>
+        <item>Tangential inlet, axial discharge</item>
+        <item>Axial inlet, axial discharge</item>
+        <item>Tangential inlet, peripheral discharge</item>
+        <item>Spray chambers</item>
+        <item>Packed-bed scrubber</item>
+        <item>Impingement Plate Scrubber</item>
+        <item>Venturi scrubber</item>
+        <item>Orifice scrubber</item>
+        <item>Condensation scrubber</item>
+        <item>Fibre-bed scrubber</item>
+        <item>Ceramic filters</item>
+        <item>Bio-filtration</item>
+        <item>Thermal</item>
+        <item>Recuperative thermal oxidizers</item>
+        <item>Catalytic thermal oxidizers</item>
+        <item>Regenerative thermal oxidizers</item>
+        <item>Flares thermal oxidizers</item>
+        <item>Gas scrubbing</item>
+        <item>Adsorption(e.g. carbon adsorption</item>
+        <item>Others</item>
+    </string-array>
+
+    <!--Mobile Labels-->
+    <string name="vehicleDetails">Vehicle Details</string>
+    <string name="category">Category</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="vehicleType">Vehicle Type</string>
+    <string name="noVehicle">No. of Vehicle</string>
+    <string name="mobileFuelType">Fuel Type</string>
+    <string name="vkt">VKT</string>
+    <string name="percentSulfur">Percent Sulfur Content</string>
+    <string name="tripPerDay">Trip Per Day</string>
+    <string name="tog">TOG (TONS/year)</string>
+    <string name="roadFare">Road Thorough Fare</string>
+
+    <!--Mobile List-->
+    <string-array name="mobileCategoryList">
+        <item>top-bottom</item>
+        <item>bottom-top</item>
+    </string-array>
+
+    <string-array name="mobileProvinceList">
+        <item>BUKIDNON</item>
+        <item>CAMIGUIN</item>
+        <item>LANAO DEL NORTE</item>
+        <item>MISAMIS OCCIDENTAL</item>
+        <item>MISAMIS ORIENTAL</item>
+    </string-array>
+
+    <string-array name="vehicleTypeList">
+        <item>Cars</item>
+        <item>Utility Vehicle</item>
+        <item>Trucks</item>
+        <item>Buses</item>
+        <item>Motorcycle/Tricycle</item>
+    </string-array>
+
+    <string-array name="mobileFuelType">
+        <item>Gasoline</item>
+        <item>Diesel</item>
+    </string-array>
+
+    <!--Area Labels-->
+    <string name="areaDetails">Area Details</string>
+    <string name="utmCoordinates">UTM Coordinates</string>
+    <string name="areaSource">Area Source</string>
+    <string name="typeSource">Type of Source</string>
+    <string name="activityRate">Activity Rate</string>
+    <string name="duration_months">Duration in months</string>
+    <string name="others_type">Others</string>
+
+    <!--Area Lists-->
+    <string-array name="typeSourceLists">
+        <item>Auto fire</item>
+        <item>Structural fire</item>
+        <item>Kaingin/Open burning</item>
+        <item>Residential construction</item>
+        <item>Non-residential construction</item>
+        <item>Road construction</item>
+        <item>Residential cooking</item>
+        <item>Others</item>
+    </string-array>
+
+    <!--Form Details-->
+
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="#adadad"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                layout="@layout/circle_indicator"
+                android:id="@+id/indicator_one"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_weight="1"/>
+
+            <include
+                layout="@layout/circle_indicator"
+                android:id="@+id/indicator_two"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_weight="1"/>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

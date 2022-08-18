@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navConstraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/baseColor"
+    android:padding="10dp">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/logoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/denrlogo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/username"
+        android:paddingTop="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Rhay Sabaria"
+        app:layout_constraintTop_toBottomOf="@id/logoContainer"
+        app:layout_constraintLeft_toLeftOf="@id/logoContainer"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Position: Inspector"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintLeft_toLeftOf="@id/username"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/department"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="Department: Resource Department"
+        app:layout_constraintTop_toBottomOf="@id/position"
+        app:layout_constraintLeft_toLeftOf="@id/position"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
