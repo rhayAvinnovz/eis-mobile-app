@@ -3,6 +3,7 @@ package com.example.eis.ui.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Space
@@ -12,12 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.eis.R
 import com.example.eis.ui.adapters.FormAdapter
+import com.example.eis.ui.api.ApiAction
 import com.example.eis.ui.api.OnApiRequestListener
 import com.example.eis.ui.base.BaseActivity
 import com.example.eis.ui.fragments.AreaFirstFragment
 import com.example.eis.ui.fragments.AreaSecondFragment
 import com.example.eis.ui.fragments.MobileFirstFragment
 import com.example.eis.ui.fragments.MobileSecondFragment
+import com.example.eis.ui.models.request.SourceRequest
+import com.example.eis.ui.models.request.VehicleRequest
 
 class AreaFormActivity : BaseActivity() , OnApiRequestListener{
 
@@ -100,7 +104,13 @@ class AreaFormActivity : BaseActivity() , OnApiRequestListener{
             }
             else {
                 firstFragment.getValues()
-                secondFragment.getValues()
+//                generalInformationArea.areas.forEach {
+//                    it.sourceId?.let { id ->
+//                        if (id.isNotBlank())
+//                            apiRequest.deleteVehicle(id.toInt())
+//                    }
+//                }
+                apiRequest.addAreaGeneral(generalInformationArea)
                 //TODO API IMPLEMENTATION
             }
 
@@ -130,6 +140,35 @@ class AreaFormActivity : BaseActivity() , OnApiRequestListener{
 
     private fun deactivate(id: Int) {
         findViewById<View>(id).findViewById<View>(R.id.indicator_bg).setBackgroundResource(R.drawable.indicator_deactivate)
+    }
+    fun addingSources(id: String){
+        if(id != "") {
+
+            generalInformationArea.areas.forEach {
+                it.generalId = id
+                if (it.typeSource!!.isNotBlank() || it.activityRate!!.isNotBlank())
+                    apiRequest.addSource(SourceRequest(it))
+                Log.wtf("areas", generalInformationArea.areas.toString())
+            }
+//            Log.wtf("vehicles", generalInformation.vehicles.toString())
+            startActivity(Intent(this,AreaActivity::class.java))
+            animateToLeft()
+            finish()
+        }
+    }
+    override fun onApiRequestSuccess(apiAction: ApiAction, result: Any) {
+        super.onApiRequestSuccess(apiAction, result)
+        when(apiAction){
+            ApiAction.ADD_AREA_GENERAL -> {
+                Log.wtf("test", result.toString())
+
+                if (result != "0"){
+                    generalInformationArea.generalId = result.toString()
+                    secondFragment.getValues()
+                    addingSources(generalInformationArea.generalId!!)
+                }
+            }
+        }
     }
     override fun onBackPressed() {
         super.onBackPressed()

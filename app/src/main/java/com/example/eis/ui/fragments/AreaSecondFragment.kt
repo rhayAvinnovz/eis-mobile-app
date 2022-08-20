@@ -18,7 +18,6 @@ class AreaSecondFragment: BaseFragment() {
     private lateinit var add: Button
     private lateinit var linearArea: LinearLayoutCompat
     private val areaInputs = mutableListOf<Pair<Int, MutableList<View>>>()
-    private val coorInputs = mutableListOf<Pair<View,View>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,11 +35,11 @@ class AreaSecondFragment: BaseFragment() {
 
         linearArea = rootView.findViewById(R.id.area_container)
         add.setOnClickListener{
-            addArea(inflater, linearArea,areaInputs,coorInputs)
+            addArea(inflater, linearArea,areaInputs)
         }
         return rootView
     }
     fun getValues(){
-        getArea(areaInputs,coorInputs)
+        getArea(areaInputs)
     }
 }

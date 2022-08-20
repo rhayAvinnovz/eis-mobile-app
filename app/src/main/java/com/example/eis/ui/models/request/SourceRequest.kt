@@ -1,12 +1,10 @@
-package com.example.eis.ui.models
+package com.example.eis.ui.models.request
 
+import com.example.eis.ui.models.AreaModel
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class AreaModel (
-
-    @SerializedName("id")
-    var sourceId: String? = "",
+data class SourceRequest (
     @SerializedName("general_id")
     var generalId: String? = "",
     @SerializedName("type_area_source")
@@ -30,8 +28,20 @@ data class AreaModel (
     @SerializedName("sox")
     var soxValue: String? = "",
     @SerializedName("voc")
-    var vocValue: String? = "",
-    @SerializedName("total")
-    var totalValue: String? = "",
-
-    ) : Serializable
+    var vocValue: String? = ""
+)   :   Serializable {
+    constructor(area: AreaModel) : this() {
+        this.generalId = area.generalId
+        this.typeSource = area.typeSource
+        this.otherSource = area.otherSource
+        this.activityRate = area.activityRate
+        this.durationMonths = area.durationMonths
+        this.address = area.address
+        this.utm = area.utm
+        this.coValue = area.coValue
+        this.noxValue = area.noxValue
+        this.pmValue = area.pmValue
+        this.soxValue = area.soxValue
+        this.vocValue = area.vocValue
+    }
+}

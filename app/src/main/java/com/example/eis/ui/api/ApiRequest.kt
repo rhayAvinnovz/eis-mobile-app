@@ -3,6 +3,7 @@ package com.example.eis.ui.api
 import android.annotation.SuppressLint
 import com.example.eis.ui.models.*
 import com.example.eis.ui.models.request.MobileListRequest
+import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
 import com.example.eis.ui.utils.RetrofitUtil
 import io.reactivex.Observable
@@ -34,6 +35,11 @@ class ApiRequest(private val onApiRequestListener: OnApiRequestListener) {
         handleObservableResult(ApiAction.ADD_MOBILE_GENERAL, apiInterface!!.addMobileGeneral(mobileGeneral))
     }
 
+    fun addAreaGeneral(areaGeneral: AreaGeneral) {
+        onApiRequestListener.onApiRequestStart(ApiAction.ADD_AREA_GENERAL)
+        handleObservableResult(ApiAction.ADD_AREA_GENERAL, apiInterface!!.addAreaGeneral(areaGeneral))
+    }
+
     fun updateMobileGeneral(mobileGeneral: MobileGeneral) {
         onApiRequestListener.onApiRequestStart(ApiAction.UPDATE_MOBILE_GENERAL)
         handleObservableResult(ApiAction.UPDATE_MOBILE_GENERAL, apiInterface!!.updateGeneralMobile(mobileGeneral))
@@ -47,6 +53,11 @@ class ApiRequest(private val onApiRequestListener: OnApiRequestListener) {
     fun addVehicle(vehicle: VehicleRequest) {
         onApiRequestListener.onApiRequestStart(ApiAction.ADD_MOBILE_VEHICLE)
         handleObservableResult(ApiAction.ADD_MOBILE_VEHICLE, apiInterface!!.addVehicle(vehicle))
+    }
+
+    fun addSource(source: SourceRequest) {
+        onApiRequestListener.onApiRequestStart(ApiAction.ADD_AREA_SOURCE)
+        handleObservableResult(ApiAction.ADD_AREA_SOURCE, apiInterface!!.addSource(source))
     }
 
     @SuppressLint("CheckResult")

@@ -333,7 +333,6 @@ open class BaseFragment: Fragment() {
         inflater: LayoutInflater,
         linearArea: LinearLayoutCompat,
         AreaInputs: MutableList<Pair<Int, MutableList<View>>>,
-        CoorInputs: MutableList<Pair<View, View>>,
     ){
         if(linearArea.childCount == 1){
             val layoutParams = LinearLayoutCompat.LayoutParams(
@@ -346,6 +345,7 @@ open class BaseFragment: Fragment() {
 
         /*function  buttons*/
 //        val coordinatesInputs = mutableListOf<Pair<View,View>>()
+        val listUtm:MutableList<Pair<View,View>> = mutableListOf()
         val view: View = inflater.inflate(R.layout.area_source_entry, linearArea, false)
         var linearUtm: LinearLayoutCompat = view.findViewById(R.id.utmContainer)
         val btn_addUtm = view.findViewById<TextView>(R.id.btn_addUtm)
@@ -365,6 +365,7 @@ open class BaseFragment: Fragment() {
         val value8 = view.findViewById<View>(R.id.txt_pm)
         val value9 = view.findViewById<View>(R.id.txt_sox)
         val value10 = view.findViewById<View>(R.id.txt_voc)
+        val value11 = view.findViewById<View>(R.id.utmContainer)
 
         list.add(value1)
         list.add(value2)
@@ -376,6 +377,7 @@ open class BaseFragment: Fragment() {
         list.add(value8)
         list.add(value9)
         list.add(value10)
+        list.add(value11)
         /*views end*/
 
 
@@ -427,14 +429,14 @@ open class BaseFragment: Fragment() {
         }
 
         btn_addUtm.setOnClickListener{
-            this.addAreaCoordinates(inflater,linearArea.indexOfChild(view),linearUtm,CoorInputs)
+            this.addAreaCoordinates(inflater,linearArea.indexOfChild(view),linearUtm,listUtm)
 //            Log.wtf("countingParent",linearArea.childCount.toString())
 
         }
 
     }
 
-    fun getArea(areaInputs: MutableList<Pair<Int,MutableList<View>>>,coorInputs: MutableList<Pair<View,View>>) {
+    fun getArea(areaInputs: MutableList<Pair<Int,MutableList<View>>>) {
 
         getGeneralInformationArea.areas.clear()
 
@@ -453,6 +455,7 @@ open class BaseFragment: Fragment() {
             val value8 = it.second[7].findViewById<TextInputEditText>(R.id.txt_pm).text.toString()
             val value9 = it.second[8].findViewById<TextInputEditText>(R.id.txt_sox).text.toString()
             val value10 = it.second[9].findViewById<TextInputEditText>(R.id.txt_voc).text.toString()
+            var lin = it.second[10].findViewById<LinearLayoutCompat>(R.id.utmContainer)
 
             addList.generalId = getGeneralInformationArea.generalId
             addList.typeSource = value1
@@ -465,7 +468,8 @@ open class BaseFragment: Fragment() {
             addList.pmValue = value8
             addList.soxValue = value9
             addList.vocValue = value10
-            addList.utm = getUtmValues(coorInputs)
+            addList.utm = getUtmValues(lin)
+
             getGeneralInformationArea.areas.add(addList)
 
 
@@ -497,29 +501,22 @@ open class BaseFragment: Fragment() {
         }
     }
 
-    fun getUtmValues(CoorInputs: MutableList<Pair<View,View>>) : String {
+    fun getUtmValues(linearLayout: LinearLayoutCompat) : String {
 
 
         val list = mutableListOf<UtmValues>()
+            for (i in 0 until linearLayout.childCount) {
+                /*Fetching data from multiple child views*/
+                var addList = UtmValues()
+                val v: View = linearLayout.findViewById<LinearLayoutCompat>(R.id.utmContainer).getChildAt(i)
 
-        CoorInputs.forEach{
-            var addList = UtmValues()
-            val value1 = it.first.findViewById<TextInputEditText>(R.id.txt_utmEasting).text.toString()
-            val value2 = it.second.findViewById<TextInputEditText>(R.id.txt_utmEasting).text.toString()
-            Log.wtf("utm","value1")
-
-            if (value1.isBlank() || value2.isBlank())
-                return@forEach
-            else
-                addList.northingInput = value1
-                addList.eastingInput = value2
-            list.add(addList)
-        }
-
-        //return list
-        //Log.wtf("errorOther",Gson().toJson(list).toString())
-        var utm_listing = Gson().toJson(list).toString()
-        return utm_listing
+                val checknorth = v.findViewById<TextInputEditText>(R.id.txt_utmNorthing).text.toString()
+                val checkeast = v.findViewById<TextInputEditText>(R.id.txt_utmEasting).text.toString()
+                addList.northingInput = checknorth
+                addList.eastingInput = checkeast
+                list.add(addList)
+            }
+        return Gson().toJson(list).toString()
     }
 
     protected val getGeneralInformationMobile: MobileGeneral by lazy {

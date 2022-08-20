@@ -1,7 +1,9 @@
 package com.example.eis.ui.api
 
+import com.example.eis.ui.models.AreaGeneral
 import com.example.eis.ui.models.MobileGeneral
 import com.example.eis.ui.models.request.MobileListRequest
+import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
 import com.example.eis.ui.models.response.*
 import io.reactivex.Observable
@@ -27,6 +29,10 @@ interface  ApiInterface {
     @POST("/avinnovz/denr-emb-r10/api/mobile/addgeneral")
     fun addMobileGeneral(@Body mobileGeneral: MobileGeneral): Observable<Int>
 
+//    ADDING GENERAL INFORMATION OF AREA ENTRY
+    @POST("/avinnovz/denr-emb-r10/api/area/addgeneral")
+    fun addAreaGeneral(@Body areaGeneral: AreaGeneral): Observable<Int>
+
 //    ADDING GENERAL INFORMATION OF MOBILE ENTRY
     @POST("/avinnovz/denr-emb-r10/api/mobile/updategeneral")
     fun updateGeneralMobile(@Body mobileGeneral: MobileGeneral): Observable<Response<Any>>
@@ -39,6 +45,10 @@ interface  ApiInterface {
 //    ADDING VEHICLE ENTRY OF MOBILE
     @POST("/avinnovz/denr-emb-r10/api/mobile/addVehicle")
     fun addVehicle(@Body vehicleRequest: VehicleRequest): Observable<Response<Any>>
+
+//    ADDING SOURCE ENTRY OF AREA
+    @POST("/avinnovz/denr-emb-r10/api/area/addsource")
+    fun addSource(@Body sourceRequest: SourceRequest): Observable<Response<Any>>
 
 //    FETCHING GENERAL INFORMATION OF MOBILE ENTRY
     @POST("/avinnovz/denr-emb-r10/api/mobile/general")
