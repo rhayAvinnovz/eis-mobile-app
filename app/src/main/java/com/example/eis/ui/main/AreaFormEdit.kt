@@ -17,47 +17,47 @@ import com.example.eis.ui.adapters.FormAdapter
 import com.example.eis.ui.api.ApiAction
 import com.example.eis.ui.api.OnApiRequestListener
 import com.example.eis.ui.base.BaseActivity
-import com.example.eis.ui.fragments.MobileFirstFragment
-import com.example.eis.ui.fragments.MobileSecondFragment
+import com.example.eis.ui.fragments.AreaFirstFragment
+import com.example.eis.ui.fragments.AreaSecondFragment
+import com.example.eis.ui.models.AreaGeneral
 import com.example.eis.ui.models.MobileGeneral
-import com.example.eis.ui.models.Vehicles
+import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
 
-class MobileFormEdit : BaseActivity(), OnApiRequestListener {
+class AreaFormEdit : BaseActivity(), OnApiRequestListener {
 
     private lateinit var vpForms: ViewPager
     private lateinit var fragments: ArrayList<Fragment>
     private var currentIndex = 0
     private var intent_id = 0
-    private var mobile_id = ""
 
     private lateinit var prev: Button
     private lateinit var next: Button
     private lateinit var space: Space
 
-    private lateinit var firstFragment: MobileFirstFragment
-    private lateinit var secondFragment: MobileSecondFragment
-    val vehicleRequest = mutableListOf<VehicleRequest>()
+    private lateinit var firstFragment: AreaFirstFragment
+    private lateinit var secondFragment: AreaSecondFragment
+    val sourceRequest = mutableListOf<SourceRequest>()
 
     private lateinit var loader: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mobile_form)
+        setContentView(R.layout.activity_area_form)
 
-        firstFragment = MobileFirstFragment()
-        secondFragment = MobileSecondFragment()
+        firstFragment = AreaFirstFragment()
+        secondFragment = AreaSecondFragment()
 
         val ss:String = intent.getStringExtra("general_id").toString()
         if (ss != null) {
             intent_id = ss.toInt()
         }
+
         initViews()
         initViewPager()
-        updateIndicator()
         initFunctions()
-        updateNavigation()
+        updateIndicator()
     }
 
     private fun initViews() {
@@ -66,7 +66,6 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
         prev = findViewById(R.id.prev)
         space = findViewById(R.id.space)
         loader = findViewById(R.id.loader)
-
     }
 
     private fun updateNavigation() {
@@ -75,7 +74,7 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
                 prev.visibility = View.GONE
                 next.visibility = View.VISIBLE
                 space.visibility = View.GONE
-                next.text = "VEHICLE ENTRIES"
+                next.text = "SOURCE ENTRIES"
             }
             1 -> {
                 prev.visibility = View.VISIBLE
@@ -98,7 +97,7 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
 
     private fun initFunctions(){
         findViewById<AppCompatImageButton>(R.id.btn_back).setOnClickListener{
-            startActivity(Intent(this,MobileActivity::class.java))
+            startActivity(Intent(this,AreaActivity::class.java))
             animateToLeft()
             finish()
         }
@@ -116,28 +115,24 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
                 updateIndicator()
             }
             else {
-                if(intent_id != 0){
+                if(intent_id != 0) {
                     firstFragment.getValues()
-
                     // Delete vehicle here first
-                    generalInformation.vehicles.forEach {
-                        it.vehicleId?.let { id ->
+                    generalInformationArea.areas.forEach {
+                        it.sourceId?.let { id ->
                             if (id.isNotBlank())
-                                apiRequest.deleteVehicle(id.toInt())
+                                apiRequest.deleteSource(id.toInt())
                         }
                     }
 
-                    apiRequest.updateMobileGeneral(generalInformation)
-
+                    apiRequest.updateAreaGeneral(generalInformationArea)
+                    //TODO API IMPLEMENTATION
                 }
-
-                //TODO API IMPLEMENTATION
             }
 
             vpForms.currentItem = currentIndex % fragments.size
         }
     }
-
     private fun updateIndicator() {
         hideKeyboard()
         deactivateAll()
@@ -162,25 +157,6 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
     private fun deactivate(id: Int) {
         findViewById<View>(id).findViewById<View>(R.id.indicator_bg).setBackgroundResource(R.drawable.indicator_deactivate)
     }
-    fun updateVehicles(){
-
-        // Delete vehicles here first
-//        generalInformation.vehicles.forEach {
-//            it.vehicleId?.let { id ->
-//                if (id.isNotBlank())
-//                    apiRequest.deleteVehicle(id.toInt())
-//            }
-//        }
-        vehicleRequest.forEach {
-            if (it.vehicleType!!.isBlank())
-                return@forEach
-            apiRequest.addVehicle(it)
-        }
-
-        startActivity(Intent(this,MobileActivity::class.java))
-        animateToLeft()
-        finish()
-    }
 
     override fun onApiRequestStart(apiAction: ApiAction) {
         super.onApiRequestStart(apiAction)
@@ -194,29 +170,36 @@ class MobileFormEdit : BaseActivity(), OnApiRequestListener {
             return
         hideLoading()
         when (apiAction){
-            ApiAction.GET_MOBILE_GENERAL -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_LONG).show()
+            ApiAction.GET_AREA_GENERAL -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_LONG).show()
         }
 
     }
     override fun onApiRequestSuccess(apiAction: ApiAction, result: Any) {
         super.onApiRequestSuccess(apiAction, result)
         when(apiAction){
-            ApiAction.GET_MOBILE_GENERAL -> {
-                generalInformation = result as MobileGeneral
+            ApiAction.GET_AREA_GENERAL -> {
+                generalInformationArea = result as AreaGeneral
                 firstFragment.setFields()
                 secondFragment.setFields()
                 hideLoading()
             }
-            ApiAction.UPDATE_MOBILE_GENERAL -> {
+            ApiAction.UPDATE_AREA_GENERAL -> {
                 secondFragment.getValueEdit()
-                updateVehicles()
+                sourceRequest.forEach {
+                    if (it.typeSource!!.isBlank())
+                        return@forEach
+                    apiRequest.addSource(it)
+                }
+                Log.wtf("sources",sourceRequest.toString())
+                startActivity(Intent(this,AreaActivity::class.java))
+                animateToLeft()
+                finish()
             }
         }
-        hideLoading()
     }
     override fun onResume() {
         super.onResume()
-        apiRequest.getMobileGeneral(intent_id)
+        apiRequest.getAreaGeneral(intent_id)
     }
     private fun showLoading() {
         loader.visibility = View.VISIBLE

@@ -10,11 +10,16 @@ import com.example.eis.R
 import com.google.android.material.textfield.TextInputEditText
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.view.forEachIndexed
+import com.example.eis.ui.main.AreaFormEdit
 import com.example.eis.ui.main.MobileFormEdit
 import com.example.eis.ui.models.*
+import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 
 open class BaseFragment: Fragment() {
@@ -429,7 +434,7 @@ open class BaseFragment: Fragment() {
         }
 
         btn_addUtm.setOnClickListener{
-            this.addAreaCoordinates(inflater,linearArea.indexOfChild(view),linearUtm,listUtm)
+            this.addAreaCoordinates(inflater,linearUtm,listUtm)
 //            Log.wtf("countingParent",linearArea.childCount.toString())
 
         }
@@ -457,7 +462,7 @@ open class BaseFragment: Fragment() {
             val value10 = it.second[9].findViewById<TextInputEditText>(R.id.txt_voc).text.toString()
             var lin = it.second[10].findViewById<LinearLayoutCompat>(R.id.utmContainer)
 
-            addList.generalId = getGeneralInformationArea.generalId
+//            addList.generalId = getGeneralInformationArea.generalId
             addList.typeSource = value1
             addList.activityRate = value2
             addList.durationMonths = value3
@@ -479,9 +484,50 @@ open class BaseFragment: Fragment() {
 
     }
 
+    fun getAreaEdit(areaInputs: MutableList<Pair<Int,MutableList<View>>>) {
+
+        getGeneralInformationArea.areas.clear()
+
+
+        areaInputs.forEach{
+            val addList = SourceRequest()
+
+
+            val value1 = it.second[0].findViewById<AppCompatSpinner>(R.id.source_type).selectedItem.toString()
+            val value2 = it.second[1].findViewById<TextInputEditText>(R.id.txt_actRate).text.toString()
+            val value3 = it.second[2].findViewById<TextInputEditText>(R.id.txt_duration).text.toString()
+            val value4 = it.second[3].findViewById<TextInputEditText>(R.id.txt_others).text.toString()
+            val value5 = it.second[4].findViewById<TextInputEditText>(R.id.txt_address).text.toString()
+            val value6 = it.second[5].findViewById<TextInputEditText>(R.id.txt_co).text.toString()
+            val value7 = it.second[6].findViewById<TextInputEditText>(R.id.txt_nox).text.toString()
+            val value8 = it.second[7].findViewById<TextInputEditText>(R.id.txt_pm).text.toString()
+            val value9 = it.second[8].findViewById<TextInputEditText>(R.id.txt_sox).text.toString()
+            val value10 = it.second[9].findViewById<TextInputEditText>(R.id.txt_voc).text.toString()
+            var lin = it.second[10].findViewById<LinearLayoutCompat>(R.id.utmContainer)
+
+            addList.generalId = getGeneralInformationArea.generalId
+            addList.typeSource = value1
+            addList.activityRate = value2
+            addList.durationMonths = value3
+            addList.otherSource = value4
+            addList.address = value5
+            addList.coValue = value6
+            addList.noxValue = value7
+            addList.pmValue = value8
+            addList.soxValue = value9
+            addList.vocValue = value10
+            addList.utm = getUtmValues(lin)
+
+           getSourceRequest.add(addList)
+
+
+        }
+//        Log.wtf("areas", getGeneralInformationArea.areas.toString())
+
+
+    }
     fun addAreaCoordinates(
         inflater: LayoutInflater,
-        parent_count: Int,
         linearCoordinates: LinearLayoutCompat,
         CoorInputs: MutableList<Pair<View,View>>
     ){
@@ -493,7 +539,6 @@ open class BaseFragment: Fragment() {
 
         CoorInputs.add(Pair(get_northing,get_easting))
         linearCoordinates.addView(view)
-        Log.wtf("counting",parent_count.toString()+" : "+linearCoordinates.childCount.toString())
 
         buttonDelete.setOnClickListener {
             linearCoordinates.removeView(view)
@@ -505,6 +550,7 @@ open class BaseFragment: Fragment() {
 
 
         val list = mutableListOf<UtmValues>()
+        list.clear()
             for (i in 0 until linearLayout.childCount) {
                 /*Fetching data from multiple child views*/
                 var addList = UtmValues()
@@ -512,11 +558,72 @@ open class BaseFragment: Fragment() {
 
                 val checknorth = v.findViewById<TextInputEditText>(R.id.txt_utmNorthing).text.toString()
                 val checkeast = v.findViewById<TextInputEditText>(R.id.txt_utmEasting).text.toString()
-                addList.northingInput = checknorth
-                addList.eastingInput = checkeast
+                if(checknorth.isNotEmpty() || checkeast.isNotEmpty()) {
+                    addList.northingInput = checknorth
+                    addList.eastingInput = checkeast
+                }
                 list.add(addList)
             }
         return Gson().toJson(list).toString()
+    }
+
+    fun setSources(sourceInputs: MutableList<Pair<Int,MutableList<View>>>,sourceList: List<AreaModel>){
+
+        sourceInputs.forEachIndexed { index, it ->
+            if(index >= sourceList.size)
+                return@forEachIndexed
+
+            val value1 = it.second[0].findViewById<AppCompatSpinner>(R.id.source_type)
+            val value2 = it.second[1].findViewById<TextInputEditText>(R.id.txt_actRate)
+            val value3 = it.second[2].findViewById<TextInputEditText>(R.id.txt_duration)
+            val value4 = it.second[3].findViewById<TextInputEditText>(R.id.txt_others)
+            val value5 = it.second[4].findViewById<TextInputEditText>(R.id.txt_address)
+            val value6 = it.second[5].findViewById<TextInputEditText>(R.id.txt_co)
+            val value7 = it.second[6].findViewById<TextInputEditText>(R.id.txt_nox)
+            val value8 = it.second[7].findViewById<TextInputEditText>(R.id.txt_pm)
+            val value9 = it.second[8].findViewById<TextInputEditText>(R.id.txt_sox)
+            val value10 = it.second[9].findViewById<TextInputEditText>(R.id.txt_voc)
+            var lin = it.second[10].findViewById<LinearLayoutCompat>(R.id.utmContainer)
+
+            setSpinnerValues(it.second[0],R.id.source_type,SpinnerEnum.FROM_RESOURCE_XML,resources.getStringArray(R.array.typeSourceLists),
+                sourceList[index].typeSource!!
+            )
+            value2.setText(sourceList[index].activityRate)
+            value3.setText(sourceList[index].durationMonths)
+            value4.setText(sourceList[index].otherSource)
+            value5.setText(sourceList[index].address)
+            value6.setText(sourceList[index].coValue)
+            value7.setText(sourceList[index].noxValue)
+            value8.setText(sourceList[index].pmValue)
+            value9.setText(sourceList[index].soxValue)
+            value10.setText(sourceList[index].vocValue)
+
+            val sourcesList: Type = object : TypeToken<ArrayList<UtmValues?>?>() {}.type
+
+            val sList: ArrayList<UtmValues> = Gson().fromJson(sourceList[index].utm, sourcesList)
+            Log.wtf("listing",sList.toString())
+            if (sList.isNotEmpty())
+                sList.forEach{
+                    val inflater: LayoutInflater = LayoutInflater.from(context)
+                    val view: View = inflater.inflate(R.layout.area_coordinates_entry, lin,false)
+                    val buttonDelete = view.findViewById<TextView>(R.id.txt_delete)
+
+                    lin.addView(view)
+                    buttonDelete.setOnClickListener {
+                        lin.removeView(view)
+                    }
+                }
+                sList.forEachIndexed { indexnew, it ->
+
+                    val v: View = lin.findViewById<LinearLayoutCompat>(R.id.utmContainer).getChildAt(indexnew)
+                    val checknorth = v.findViewById<TextInputEditText>(R.id.txt_utmNorthing)
+                    val checkeast = v.findViewById<TextInputEditText>(R.id.txt_utmEasting)
+                    checknorth.setText(sList[indexnew].northingInput)
+                    checkeast.setText(sList[indexnew].eastingInput)
+
+
+                }
+        }
     }
 
     protected val getGeneralInformationMobile: MobileGeneral by lazy {
@@ -532,5 +639,10 @@ open class BaseFragment: Fragment() {
     protected val getVehicleRequest: MutableList<VehicleRequest> by lazy {
         val activity = requireActivity()
         (activity as MobileFormEdit).vehicleRequest
+    }
+
+    protected val getSourceRequest: MutableList<SourceRequest> by lazy {
+        val activity = requireActivity()
+        (activity as AreaFormEdit).sourceRequest
     }
 }

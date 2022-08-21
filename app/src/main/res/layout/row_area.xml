@@ -33,11 +33,11 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/rowSource"
+                    android:id="@+id/rowProvince"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:text="Source"/>
+                    android:text="province"/>
 
 
                 <LinearLayout
@@ -70,11 +70,36 @@
                             android:text="City"
                             android:textSize="15sp"/>
                     </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Source Count: "
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:id="@+id/rowCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="asdasd"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -89,7 +114,6 @@
                             android:text="asdasd"/>
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

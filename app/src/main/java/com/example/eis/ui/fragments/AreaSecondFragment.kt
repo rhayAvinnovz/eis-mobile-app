@@ -39,7 +39,21 @@ class AreaSecondFragment: BaseFragment() {
         }
         return rootView
     }
+    fun setFields(){
+        val sourceList = getGeneralInformationArea.areas
+
+        if (sourceList.isNotEmpty())
+            sourceList.forEach{_ ->
+                add.performClick()
+                setSources(areaInputs,sourceList)
+            }
+    }
     fun getValues(){
         getArea(areaInputs)
+    }
+
+    fun getValueEdit(){
+        getSourceRequest.clear()
+        getAreaEdit(areaInputs)
     }
 }

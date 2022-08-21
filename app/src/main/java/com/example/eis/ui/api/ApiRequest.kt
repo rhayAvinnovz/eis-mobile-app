@@ -2,6 +2,7 @@ package com.example.eis.ui.api
 
 import android.annotation.SuppressLint
 import com.example.eis.ui.models.*
+import com.example.eis.ui.models.request.AreaListRequest
 import com.example.eis.ui.models.request.MobileListRequest
 import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
@@ -25,9 +26,19 @@ class ApiRequest(private val onApiRequestListener: OnApiRequestListener) {
         handleObservableResult(ApiAction.GET_MOBILE_LIST, apiInterface!!.getMobileList(mobileListRequest))
     }
 
+    fun getAreaList(areaListRequest: AreaListRequest) {
+        onApiRequestListener.onApiRequestStart(ApiAction.GET_AREA_LIST)
+        handleObservableResult(ApiAction.GET_AREA_LIST, apiInterface!!.getAreaList(areaListRequest))
+    }
+
     fun getMobileGeneral(generalId: Int) {
         onApiRequestListener.onApiRequestStart(ApiAction.GET_MOBILE_GENERAL)
         handleObservableResult(ApiAction.GET_MOBILE_GENERAL, apiInterface!!.getMobileGeneral(generalId))
+    }
+
+    fun getAreaGeneral(generalId: Int) {
+        onApiRequestListener.onApiRequestStart(ApiAction.GET_AREA_GENERAL)
+        handleObservableResult(ApiAction.GET_AREA_GENERAL, apiInterface!!.getAreaGeneral(generalId))
     }
 
     fun addMobileGeneral(mobileGeneral: MobileGeneral) {
@@ -45,9 +56,19 @@ class ApiRequest(private val onApiRequestListener: OnApiRequestListener) {
         handleObservableResult(ApiAction.UPDATE_MOBILE_GENERAL, apiInterface!!.updateGeneralMobile(mobileGeneral))
     }
 
+    fun updateAreaGeneral(areaGeneral: AreaGeneral) {
+        onApiRequestListener.onApiRequestStart(ApiAction.UPDATE_AREA_GENERAL)
+        handleObservableResult(ApiAction.UPDATE_AREA_GENERAL, apiInterface!!.updateGeneralArea(areaGeneral))
+    }
+
     fun deleteVehicle(vehicleId: Int) {
         onApiRequestListener.onApiRequestStart(ApiAction.DELETE_MOBILE_VEHICLE)
         handleObservableResult(ApiAction.DELETE_MOBILE_VEHICLE, apiInterface!!.deleteVehicle(vehicleId))
+    }
+
+    fun deleteSource(sourceId: Int) {
+        onApiRequestListener.onApiRequestStart(ApiAction.DELETE_AREA_SOURCE)
+        handleObservableResult(ApiAction.DELETE_AREA_SOURCE, apiInterface!!.deleteSource(sourceId))
     }
 
     fun addVehicle(vehicle: VehicleRequest) {

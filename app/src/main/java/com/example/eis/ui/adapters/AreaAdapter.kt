@@ -18,10 +18,11 @@ class AreaAdapter(private val context: Context,
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val cvArea: MaterialCardView = itemView.findViewById(R.id.cv_area)
-        val tvSource: TextView = itemView.findViewById(R.id.rowSource)
+        val tvSource: TextView = itemView.findViewById(R.id.rowProvince)
         val tvYear: TextView = itemView.findViewById(R.id.rowYear)
         val tvCity: TextView = itemView.findViewById(R.id.rowCity)
         val tvStatus: TextView = itemView.findViewById(R.id.rowStatus)
+        val tvCount: TextView = itemView.findViewById(R.id.rowCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,10 +32,11 @@ class AreaAdapter(private val context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val area = area[position]
-        holder.tvSource.text = area.source
+        holder.tvSource.text = area.province
         holder.tvYear.text = area.year
         holder.tvCity.text = area.city
         holder.tvStatus.text = area.status
+        holder.tvCount.text = area.count
         holder.cvArea.setOnClickListener{
             areaListener.onAreaSelected(area)
         }

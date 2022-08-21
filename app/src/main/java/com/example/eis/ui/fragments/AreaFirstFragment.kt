@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.eis.R
 import com.example.eis.databinding.FragmentAreaFirstBinding
@@ -39,10 +40,72 @@ class AreaFirstFragment: BaseFragment() {
         spinnerCity = rootView.findViewById(R.id.spinner_areaCity)
         resCity = String()
 
-        checkProvince()
+//        checkProvince()
+        spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                var resProvince = parent?.getItemAtPosition(position).toString()
+                var arrayAdapter: ArrayAdapter<String>
+                var list : List<String> = listOf()
+
+                if(resProvince == "BUKIDNON"){
+                    list = (resources.getStringArray(R.array.cityBukidnon) as Array<*>).map { it.toString() }
+                    arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
+                    spinnerCity.adapter = arrayAdapter
+
+
+                }
+                if(resProvince == "CAMIGUIN"){
+                    list = (resources.getStringArray(R.array.cityCamiguin) as Array<*>).map { it.toString() }
+                    arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
+                    spinnerCity.adapter = arrayAdapter
+
+
+                }
+                if(resProvince == "LANAO DEL NORTE"){
+                    list = (resources.getStringArray(R.array.cityLanao) as Array<*>).map { it.toString() }
+                    arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
+                    spinnerCity.adapter = arrayAdapter
+
+
+                }
+                if(resProvince == "MISAMIS OCCIDENTAL"){
+                    list = (resources.getStringArray(R.array.cityOccidental) as Array<*>).map { it.toString() }
+                    arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
+                    spinnerCity.adapter = arrayAdapter
+
+
+                }
+                if(resProvince == "MISAMIS ORIENTAL"){
+                    list = (resources.getStringArray(R.array.cityOriental) as Array<*>).map { it.toString() }
+                    arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
+                    spinnerCity.adapter = arrayAdapter
+
+
+                }
+                getCity()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
 
 
         return rootView
+    }
+
+    fun setFields(){
+        checkProvince()
+        setValue(rootView,getGeneralInformationArea.year,R.id.txt_year)
+        setSpinnerValues(rootView,R.id.spinner_areaProvince,SpinnerEnum.FROM_RESOURCE_XML,resources.getStringArray(R.array.mobileProvinceList),
+            getGeneralInformationArea.province.toString()
+        )
     }
 
     fun getValues(){
@@ -65,7 +128,7 @@ class AreaFirstFragment: BaseFragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                resCity = ""
             }
 
         }
@@ -81,42 +144,49 @@ class AreaFirstFragment: BaseFragment() {
             ) {
                 var resProvince = parent?.getItemAtPosition(position).toString()
                 var arrayAdapter: ArrayAdapter<String>
+                var list : List<String> = listOf()
 
                 if(resProvince == "BUKIDNON"){
-                    var list = (resources.getStringArray(R.array.cityBukidnon) as Array<*>).map { it.toString() }
-
+                    list = (resources.getStringArray(R.array.cityBukidnon) as Array<*>).map { it.toString() }
                     arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
                     spinnerCity.adapter = arrayAdapter
-                    getCity()
+
+                   
                 }
                 if(resProvince == "CAMIGUIN"){
-                    var list = (resources.getStringArray(R.array.cityCamiguin) as Array<*>).map { it.toString() }
-
+                    list = (resources.getStringArray(R.array.cityCamiguin) as Array<*>).map { it.toString() }
                     arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
                     spinnerCity.adapter = arrayAdapter
-                    getCity()
+
+                   
                 }
                 if(resProvince == "LANAO DEL NORTE"){
-                    var list = (resources.getStringArray(R.array.cityLanao) as Array<*>).map { it.toString() }
-
+                    list = (resources.getStringArray(R.array.cityLanao) as Array<*>).map { it.toString() }
                     arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
                     spinnerCity.adapter = arrayAdapter
-                    getCity()
+
+                   
                 }
                 if(resProvince == "MISAMIS OCCIDENTAL"){
-                    var list = (resources.getStringArray(R.array.cityOccidental) as Array<*>).map { it.toString() }
-
+                    list = (resources.getStringArray(R.array.cityOccidental) as Array<*>).map { it.toString() }
                     arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
                     spinnerCity.adapter = arrayAdapter
-                    getCity()
+
+                   
                 }
                 if(resProvince == "MISAMIS ORIENTAL"){
-                    var list = (resources.getStringArray(R.array.cityOriental) as Array<*>).map { it.toString() }
-
+                    list = (resources.getStringArray(R.array.cityOriental) as Array<*>).map { it.toString() }
                     arrayAdapter = ArrayAdapter(rootView.context,android.R.layout.simple_spinner_item, list)
                     spinnerCity.adapter = arrayAdapter
-                    getCity()
+
+                   
                 }
+                if(list.contains(getGeneralInformationArea.city.toString())){
+                    spinnerCity.setSelection(list.indexOf(getGeneralInformationArea.city))
+                }else{
+                    spinnerCity.setSelection(0)
+                }
+                getCity()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
