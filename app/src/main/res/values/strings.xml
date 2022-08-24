@@ -49,11 +49,13 @@
     <string name="motherCompany">Mother Company</string>
     <string name="nameCompany">Name of Company</string>
     <string name="address">Address</string>
+    <string name="others">Other Industry</string>
     <string name="industryType">Industry Type</string>
     <string name="plantName">Plant Name</string>
     <string name="plantAddress">Plant Address</string>
     <string name="apsiTypeLabel">APSI Type</string>
     <string name="apsiCapacity">APSI Capacity</string>
+    <string name="apsiOthers">Others</string>
     <string name="utmEasting">UTM Easting</string>
     <string name="utmNorthing">UTM Northing</string>
     <string name="fuelType">Fuel Type</string>

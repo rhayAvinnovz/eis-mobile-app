@@ -14,6 +14,7 @@ import com.example.eis.ui.api.OnApiRequestListener
 import com.example.eis.ui.models.AreaGeneral
 import com.example.eis.ui.models.Mobile
 import com.example.eis.ui.models.MobileGeneral
+import com.example.eis.ui.models.StationaryGeneral
 import com.example.eis.ui.utils.Constants
 
 open class BaseActivity: AppCompatActivity(), OnApiRequestListener {
@@ -21,6 +22,7 @@ open class BaseActivity: AppCompatActivity(), OnApiRequestListener {
     protected lateinit var apiRequest: ApiRequest
     protected var generalInformation: MobileGeneral = MobileGeneral()
     protected var generalInformationArea: AreaGeneral = AreaGeneral()
+    protected var generalInformationStationary: StationaryGeneral = StationaryGeneral()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,9 @@ open class BaseActivity: AppCompatActivity(), OnApiRequestListener {
         if (intent.hasExtra(Constants.GENERAL_INFORMATION_AREA))
             generalInformationArea =
                 intent.getSerializableExtra(Constants.GENERAL_INFORMATION_AREA) as AreaGeneral
+        if (intent.hasExtra(Constants.GENERAL_INFORMATION_STATIONARY))
+            generalInformationStationary =
+                intent.getSerializableExtra(Constants.GENERAL_INFORMATION_STATIONARY) as StationaryGeneral
     }
 
     fun animateToRight() {
@@ -62,6 +67,10 @@ open class BaseActivity: AppCompatActivity(), OnApiRequestListener {
     }
     fun getGeneralInfoArea(): AreaGeneral {
         return generalInformationArea
+    }
+
+    fun getGeneralInfoStationary(): StationaryGeneral {
+        return generalInformationStationary
     }
     fun Activity.hideKeyboard() = WindowInsetsControllerCompat(window, window.decorView).hide(
         WindowInsetsCompat.Type.ime())

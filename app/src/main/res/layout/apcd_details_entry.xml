@@ -20,6 +20,7 @@
                 android:orientation="horizontal"
                 android:paddingBottom="10dp">
                 <Spinner
+                    android:id="@+id/apcd_type"
                     android:layout_weight="1"
                     android:layout_marginTop="10dp"
                     android:padding="20dp"
@@ -27,7 +28,35 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/spinner_material"
                     android:entries="@array/apcdType"/>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/layout_apcd_others"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/apsiOthers"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/apcd_type_others"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/btn_deleteApcdOthers"
+                        android:layout_width="40dp"
+                        android:layout_height="30dp"
+                        android:background="@color/white"
+                        android:text="X"
+                        android:gravity="center"
+                        android:textColor="@color/deleteColor"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
                 <Space
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"/>
@@ -41,7 +70,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txt_plantAddress"
+                        android:id="@+id/txt_apcdEfficiency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 

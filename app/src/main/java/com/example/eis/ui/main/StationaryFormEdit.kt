@@ -1,17 +1,14 @@
 package com.example.eis.ui.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Space
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,17 +20,17 @@ import com.example.eis.ui.api.ApiAction
 import com.example.eis.ui.base.BaseActivity
 import com.example.eis.ui.fragments.StationaryFirstFragment
 import com.example.eis.ui.fragments.StationarySecondFragment
-import com.example.eis.ui.models.ApsiModel
-import com.example.eis.ui.models.request.ApsiRequest
+import com.example.eis.ui.models.AreaGeneral
+import com.example.eis.ui.models.StationaryGeneral
 import com.example.eis.ui.models.request.PlantRequest
 import com.example.eis.ui.models.request.SourceRequest
-import com.example.eis.ui.models.request.VehicleRequest
 
-class StationaryFormActivity : BaseActivity() {
+class StationaryFormEdit : BaseActivity() {
 
     private lateinit var vpForms: ViewPager
     private lateinit var fragments: ArrayList<Fragment>
     private var currentIndex = 0
+    private var intent_id = 0
 
     private lateinit var prev: Button
     private lateinit var next: Button
@@ -41,7 +38,11 @@ class StationaryFormActivity : BaseActivity() {
 
     private lateinit var firstFragment: StationaryFirstFragment
     private lateinit var secondFragment: StationarySecondFragment
+
     private lateinit var apsiId: String
+    val plantRequest = mutableListOf<PlantRequest>()
+
+    private lateinit var loader: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,10 @@ class StationaryFormActivity : BaseActivity() {
         secondFragment = StationarySecondFragment()
         apsiId = String()
 
+        val ss:String = intent.getStringExtra("general_id").toString()
+        if (ss != null) {
+            intent_id = ss.toInt()
+        }
         initViews()
         initViewPager()
         initFunctions()
@@ -63,6 +68,7 @@ class StationaryFormActivity : BaseActivity() {
         next = findViewById(R.id.next)
         prev = findViewById(R.id.prev)
         space = findViewById(R.id.space)
+        loader = findViewById(R.id.loader)
     }
 
     private fun updateNavigation() {
@@ -71,13 +77,13 @@ class StationaryFormActivity : BaseActivity() {
                 prev.visibility = View.GONE
                 next.visibility = View.VISIBLE
                 space.visibility = View.GONE
-                next.text = "ADD PLANT"
+                next.text = "PLANT ENTRIES"
             }
             1 -> {
                 prev.visibility = View.VISIBLE
                 next.visibility = View.VISIBLE
                 space.visibility = View.VISIBLE
-                next.text = "SUBMIT"
+                next.text = "UPDATE"
             }
         }
     }
@@ -111,9 +117,24 @@ class StationaryFormActivity : BaseActivity() {
                 updateIndicator()
             }
             else {
-                firstFragment.getValues()
-                Log.wtf("checkStationary",getGeneralInfoStationary().toString())
-                apiRequest.addStationaryGeneral(getGeneralInfoStationary())
+                if(intent_id != 0){
+                    firstFragment.getValues()
+
+                    generalInformationStationary.plants.forEach {
+                        it.plantId?.let { id ->
+                            if (id.isNotBlank())
+                                apiRequest.deletePlant(id.toInt())
+                        }
+                        it.apsi.forEach {
+                            it.plantId?.let { id ->
+                                if (id.isNotBlank())
+                                    apiRequest.deleteApsi(id.toInt())
+                            }
+                        }
+                    }
+                    apiRequest.updateStationaryGeneral(generalInformationStationary)
+
+                }
                 //TODO API IMPLEMENTATION
             }
 
@@ -144,45 +165,61 @@ class StationaryFormActivity : BaseActivity() {
     private fun deactivate(id: Int) {
         findViewById<View>(id).findViewById<View>(R.id.indicator_bg).setBackgroundResource(R.drawable.indicator_deactivate)
     }
-
-//    private fun addingApsi(id: String) :String{
+    override fun onApiRequestStart(apiAction: ApiAction) {
+        super.onApiRequestStart(apiAction)
+        if (isFinishing || isDestroyed)
+            return
+        showLoading()
+    }
+    //    private fun addingApsi(id: String) :String{
 //        apsiId = id
 //        return id
 //    }
+    override fun onApiRequestFailed(apiAction: ApiAction, t: Throwable) {
+        super.onApiRequestFailed(apiAction, t)
+        if (isFinishing || isDestroyed)
+            return
+        hideLoading()
+        when (apiAction){
+            ApiAction.GET_STATIONARY_GENERAL -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_LONG).show()
+            ApiAction.UPDATE_STATIONARY_GENERAL -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_LONG).show()
+            ApiAction.DELETE_STATIONARY_PLANT -> Toast.makeText(this, t.localizedMessage, Toast.LENGTH_LONG).show()
+        }
+
+    }
     override fun onApiRequestSuccess(apiAction: ApiAction, result: Any) {
         super.onApiRequestSuccess(apiAction, result)
         when(apiAction){
-            ApiAction.ADD_STATIONARY_GENERAL -> {
-                Log.wtf("test", result.toString())
+            ApiAction.GET_STATIONARY_GENERAL -> {
+                generalInformationStationary = result as StationaryGeneral
+                firstFragment.setFields()
+                secondFragment.setFields()
+                hideLoading()
+            }
+            ApiAction.UPDATE_STATIONARY_GENERAL -> {
 
-                if (result != "0"){
-                    generalInformationStationary.generalId = result.toString()
-                    secondFragment.getValues()
-                    generalInformationStationary.plants.forEach { plant->
-                        plant.generalId = generalInformationStationary.generalId
-                        if (plant.plantName!!.isNotBlank() || plant.plantName!!.isNotBlank()) {
-                            apiRequest.addPlant(PlantRequest(plant))
-//                            plant.apsi.forEach {
-//                                it.let {
-//                                    it.plantId = apsiId
-//                                    Log.wtf("stationary", plant.plantName.toString())
-//                                    Log.wtf("apsis", it.toString())
-//                                }
-//                            }
-                        }
-                    }
-
+                secondFragment.getValueEdit()
+                plantRequest.forEach {
+                    if (it.plantName!!.isBlank())
+                        return@forEach
+                    apiRequest.addPlant(it)
                 }
+                Log.wtf("sources",plantRequest.toString())
                 startActivity(Intent(this,StationaryActivity::class.java))
                 animateToLeft()
                 finish()
             }
-//            ApiAction.ADD_STATIONARY_PLANT -> {
-//                if (result != "0"){
-//                    addingApsi(result.toString())
-//                }
-//            }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        apiRequest.getStationaryGeneral(intent_id)
+    }
+    private fun showLoading() {
+        loader.visibility = View.VISIBLE
+    }
+    private fun hideLoading() {
+        loader.visibility = View.GONE
     }
     override fun onBackPressed() {
         super.onBackPressed()

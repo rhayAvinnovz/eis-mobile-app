@@ -13,7 +13,9 @@ import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.view.forEachIndexed
 import com.example.eis.ui.main.AreaFormEdit
 import com.example.eis.ui.main.MobileFormEdit
+import com.example.eis.ui.main.StationaryFormEdit
 import com.example.eis.ui.models.*
+import com.example.eis.ui.models.request.PlantRequest
 import com.example.eis.ui.models.request.SourceRequest
 import com.example.eis.ui.models.request.VehicleRequest
 import com.google.android.material.textfield.TextInputLayout
@@ -71,7 +73,7 @@ open class BaseFragment: Fragment() {
     fun addPlant(
         inflater: LayoutInflater,
         linearPlant: LinearLayoutCompat,
-        plantInputs: MutableList<Pair<View, View>>,
+        plantInputs: MutableList<Pair<Int,MutableList<View>>>,
     ){
         if(linearPlant.childCount == 1){
             val layoutParams = LinearLayoutCompat.LayoutParams(
@@ -81,21 +83,31 @@ open class BaseFragment: Fragment() {
             layoutParams.weight = 5.0f
             linearPlant.layoutParams = layoutParams
         }
-        val apsiInputs = mutableListOf<Pair<View, View>>()
+        val apsiInputs = mutableListOf<View>()
 
-        val view1: View = inflater.inflate(R.layout.plant_details_entry, linearPlant, false)
-        val view2: View = inflater.inflate(R.layout.apsi_details_entry, null, false)
-        //val view3: View = inflater.inflate(R.layout.apcd_details_entry, linearPlant, false)
-        var linearApsi: LinearLayoutCompat = view1.findViewById(R.id.apsiContainer)
-        val textView = view1.findViewById<TextView>(R.id.tx_plant)
-        val btn_addApsi = view1.findViewById<TextView>(R.id.btn_addApsi)
-        val buttonDelete = view1.findViewById<AppCompatButton>(R.id.btn_delete)
+        val view: View = inflater.inflate(R.layout.plant_details_entry, linearPlant, false)
+        var linearApsi: LinearLayoutCompat = view.findViewById(R.id.apsiContainer)
+        val textView = view.findViewById<TextView>(R.id.tx_plant)
+        val btn_addApsi = view.findViewById<TextView>(R.id.btn_addApsi)
+        val buttonDelete = view.findViewById<AppCompatButton>(R.id.btn_delete)
 
-        linearPlant.addView(view1)
+        /*views*/
+        val list:MutableList<View> = mutableListOf()
+        val value1 = view.findViewById<View>(R.id.txt_plantName)
+        val value2 = view.findViewById<View>(R.id.txt_plantAddress)
+        val value3 = view.findViewById<View>(R.id.apsiContainer)
+
+        list.add(value1)
+        list.add(value2)
+        list.add(value3)
+        /*views end*/
+
+        linearPlant.addView(view)
+        plantInputs.add(Pair(linearPlant.childCount,list))
         textView.text = "Plant ${linearPlant.childCount} Details"
         buttonDelete.setOnClickListener {
-            linearPlant.removeView(view1)
-//            vehicleInputs.remove(Pair(linearPlant.childCount,list))
+            plantInputs.remove(Pair(linearPlant.childCount,list))
+            linearPlant.removeView(view)
         }
         btn_addApsi.setOnClickListener{
             this.addApsi(inflater,linearApsi,apsiInputs)
@@ -106,7 +118,7 @@ open class BaseFragment: Fragment() {
     fun addApsi(
         inflater: LayoutInflater,
         linearApsi: LinearLayoutCompat,
-        ApsiInputs: MutableList<Pair<View, View>>
+        ApsiInputs: MutableList<View>
     ){
         if(linearApsi.childCount == 1){
             val layoutParams = LinearLayoutCompat.LayoutParams(
@@ -117,15 +129,19 @@ open class BaseFragment: Fragment() {
             linearApsi.layoutParams = layoutParams
         }
         val apcdInputs = mutableListOf<Pair<View, View>>()
-        var count = 1
 
         val view: View = inflater.inflate(R.layout.apsi_details_entry, linearApsi, false)
         var linearApcd: LinearLayoutCompat = view.findViewById(R.id.apcdContainer)
         val btn_addApcd = view.findViewById<TextView>(R.id.btn_addApcd)
         val textView = view.findViewById<TextView>(R.id.tx_apsi)
         val buttonDelete = view.findViewById<AppCompatButton>(R.id.btn_delete)
+        val spinnerApsi = view.findViewById<AppCompatSpinner>(R.id.spinner_apsiType)
+        val layoutApsiOthers = view.findViewById<LinearLayoutCompat>(R.id.layout_apsi_others)
+        val layoutUnitOthers = view.findViewById<TextInputLayout>(R.id.apsiUnitLayout)
+        val spinnerFuel = view.findViewById<AppCompatSpinner>(R.id.spinner_fuelType)
+        val layoutFuelOthers = view.findViewById<LinearLayoutCompat>(R.id.layout_fuel_others)
 
-        //plantInputs.add(Pair(plantName,plantAddress))
+        /*Functions*/
         linearApsi.addView(view)
         textView.text = "Apsi ${linearApsi.childCount} Details"
         btn_addApcd.setOnClickListener{
@@ -133,8 +149,65 @@ open class BaseFragment: Fragment() {
         }
         buttonDelete.setOnClickListener {
             linearApsi.removeView(view)
-//            vehicleInputs.remove(Pair(linearPlant.childCount,list))
         }
+        view.findViewById<AppCompatSpinner>(R.id.spinner_apsiType).onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val checkApsi = parent?.getItemAtPosition(position).toString()
+                if (checkApsi == "Others") {
+                    layoutApsiOthers.visibility = View.VISIBLE
+                    layoutUnitOthers.visibility = View.VISIBLE
+                } else {
+                    layoutApsiOthers.visibility = View.GONE
+                    layoutUnitOthers.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        view.findViewById<AppCompatSpinner>(R.id.spinner_fuelType).onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val checkApsi = parent?.getItemAtPosition(position).toString()
+                if (checkApsi == "Others") {
+                    spinnerFuel.visibility = View.GONE
+                    layoutFuelOthers.visibility = View.VISIBLE
+                } else {
+                    spinnerFuel.visibility = View.VISIBLE
+                    layoutFuelOthers.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        view.findViewById<TextView>(R.id.btn_deleteApsiOthers).setOnClickListener{
+            spinnerApsi.visibility = View.VISIBLE
+            layoutApsiOthers.visibility = View.GONE
+            layoutUnitOthers.visibility = View.GONE
+
+        }
+        view.findViewById<TextView>(R.id.btn_deleteFuelOthers).setOnClickListener{
+            spinnerFuel.visibility = View.VISIBLE
+            layoutFuelOthers.visibility = View.GONE
+        }
+
+        /*End Functions*/
     }
 
     fun addApcd(
@@ -152,13 +225,42 @@ open class BaseFragment: Fragment() {
         }
         val view: View = inflater.inflate(R.layout.apcd_details_entry, linearApcd, false)
         val buttonDelete = view.findViewById<TextView>(R.id.txt_delete)
+        val spinnerApcd = view.findViewById<AppCompatSpinner>(R.id.apcd_type)
+        val layoutApcdOthers = view.findViewById<LinearLayoutCompat>(R.id.layout_apcd_others)
 
-        //plantInputs.add(Pair(plantName,plantAddress))
+        /*Functions*/
         linearApcd.addView(view)
         buttonDelete.setOnClickListener {
             linearApcd.removeView(view)
-//            vehicleInputs.remove(Pair(linearPlant.childCount,list))
         }
+        view.findViewById<AppCompatSpinner>(R.id.apcd_type).onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val checkApsi = parent?.getItemAtPosition(position).toString()
+                if (checkApsi == "Others") {
+                    spinnerApcd.visibility = View.GONE
+                    layoutApcdOthers.visibility = View.VISIBLE
+                } else {
+                    spinnerApcd.visibility = View.VISIBLE
+                    layoutApcdOthers.visibility = View.GONE
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        view.findViewById<TextView>(R.id.btn_deleteApcdOthers).setOnClickListener{
+            spinnerApcd.visibility = View.VISIBLE
+            layoutApcdOthers.visibility = View.GONE
+        }
+        /*End Functions*/
     }
 
     fun addVehicle(
@@ -523,6 +625,57 @@ open class BaseFragment: Fragment() {
 
         }
 //        Log.wtf("areas", getGeneralInformationArea.areas.toString())
+    }
+    fun getPlant(plantInputs: MutableList<Pair<Int,MutableList<View>>>) {
+
+        getGeneralInformationStationary.plants.clear()
+
+
+        plantInputs.forEach{
+            val addList = PlantModel()
+
+
+            val value1 = it.second[0].findViewById<TextInputEditText>(R.id.txt_plantName).text.toString()
+            val value2 = it.second[1].findViewById<TextInputEditText>(R.id.txt_plantAddress).text.toString()
+            var lin = it.second[2].findViewById<LinearLayoutCompat>(R.id.apsiContainer)
+
+//            addList.generalId = getGeneralInformationArea.generalId
+            addList.plantName = value1
+            addList.plantAddress = value2
+            addList.apsi = getApsiValues(lin)
+
+            getGeneralInformationStationary.plants.add(addList)
+
+
+        }
+        Log.wtf("plants", getGeneralInformationStationary.plants.toString())
+
+
+    }
+
+    fun getPlantEdit(plantInputs: MutableList<Pair<Int,MutableList<View>>>) {
+
+        getGeneralInformationStationary.plants.clear()
+
+
+        plantInputs.forEach{
+            val addList = PlantRequest()
+
+
+            val value1 = it.second[0].findViewById<TextInputEditText>(R.id.txt_plantName).text.toString()
+            val value2 = it.second[1].findViewById<TextInputEditText>(R.id.txt_plantAddress).text.toString()
+            var lin = it.second[2].findViewById<LinearLayoutCompat>(R.id.apsiContainer)
+
+            addList.generalId = getGeneralInformationStationary.generalId
+            addList.plantName = value1
+            addList.plantAddress = value2
+            addList.apsi = getApsiValues(lin)
+
+            getPlantRequest.add(addList)
+
+
+        }
+        Log.wtf("plants", getGeneralInformationStationary.plants.toString())
 
 
     }
@@ -565,6 +718,156 @@ open class BaseFragment: Fragment() {
                 list.add(addList)
             }
         return Gson().toJson(list).toString()
+    }
+
+    fun getApsiValues(linearLayout: LinearLayoutCompat) : ArrayList<ApsiModel> {
+
+
+        val list: ArrayList<ApsiModel> = arrayListOf()
+        list.clear()
+        for (i in 0 until linearLayout.childCount) {
+            /*Fetching data from multiple child views*/
+            var addList = ApsiModel()
+            val v: View = linearLayout.findViewById<LinearLayoutCompat>(R.id.apsiContainer).getChildAt(i)
+
+            val apsiOthers = v.findViewById<TextInputEditText>(R.id.apsi_type_others).text.toString()
+            val apsiUnitOthers = v.findViewById<TextInputEditText>(R.id.txt_apsiUnitOthers).text.toString()
+            val apsiCapacity = v.findViewById<TextInputEditText>(R.id.apsi_capacity).text.toString()
+            val utmEasting = v.findViewById<TextInputEditText>(R.id.txt_utmEasting).text.toString()
+            val utmNorthing = v.findViewById<TextInputEditText>(R.id.txt_utmNorthing).text.toString()
+            val fuelType = v.findViewById<AppCompatSpinner>(R.id.spinner_fuelType).selectedItem.toString()
+            val fuelOthers = v.findViewById<TextInputEditText>(R.id.fuel_type_others).text.toString()
+            val fuelRate = v.findViewById<TextInputEditText>(R.id.txt_fuelRate).text.toString()
+            val fuelConsumption = v.findViewById<TextInputEditText>(R.id.txt_fuelConsumption).text.toString()
+            val operatingHours = v.findViewById<TextInputEditText>(R.id.txt_operatingHours).text.toString()
+            val fuelUnit = v.findViewById<AppCompatSpinner>(R.id.spinner_fuelUnit).selectedItem.toString()
+            val coValue = v.findViewById<TextInputEditText>(R.id.txt_co).text.toString()
+            val noxValue = v.findViewById<TextInputEditText>(R.id.txt_nox).text.toString()
+            val pmValue = v.findViewById<TextInputEditText>(R.id.txt_pm).text.toString()
+            val soxValue = v.findViewById<TextInputEditText>(R.id.txt_sox).text.toString()
+            val vocValue = v.findViewById<TextInputEditText>(R.id.txt_voc).text.toString()
+            val apcd = v.findViewById<LinearLayoutCompat>(R.id.apcdContainer)
+
+            if(v.findViewById<AppCompatSpinner>(R.id.spinner_apsiType).selectedItem.toString().isNotEmpty() || apsiCapacity.isNotEmpty()) {
+                var type = v.findViewById<AppCompatSpinner>(R.id.spinner_apsiType).selectedItem.toString()
+                if(type == "Boiler"){
+                    addList.apsiType = "boiler_hp"
+                    addList.apsiUnit = "HP"
+                    addList.apsiSize = when {
+                        apsiCapacity.toInt() <= 250 -> {
+                            "Medium"
+                        }
+                        apsiCapacity.toInt() >= 251 -> {
+                            "Large"
+                        }
+                        else -> {""}
+                    }
+                }
+                if(type == "Generator"){
+                    addList.apsiType = "generator_kw"
+                    addList.apsiUnit = "KW"
+                    addList.apsiSize = when {
+                        apsiCapacity.toInt() <= 250 -> {
+                            "Medium"
+                        }
+                        apsiCapacity.toInt() >= 251 -> {
+                            "Large"
+                        }
+                        else -> {""}
+                    }
+                }
+                if(type == "Others"){
+                    if(apsiOthers.isNotEmpty() && apsiUnitOthers.isNotEmpty()) {
+                        addList.apsiType = type
+                        addList.otherApsi = apsiOthers
+                        addList.apsiUnit = apsiUnitOthers
+                        addList.apsiSize = ""
+                    }
+                }
+                addList.apsiCapacity = apsiCapacity
+                addList.utmEasting = utmEasting
+                addList.utmNorthing = utmNorthing
+                addList.fuelType = fuelType
+                addList.otherFuel = if (fuelOthers.isNotEmpty()) fuelOthers else "0"
+                addList.fuelRate = fuelRate
+                addList.fuelUsed = fuelConsumption
+                addList.fuelUnit = fuelUnit
+                addList.operatingHours = operatingHours
+                addList.apcd = getApcdValues(apcd)
+                addList.coValue = coValue
+                addList.noxValue = noxValue
+                addList.pmValue = pmValue
+                addList.soxValue = soxValue
+                addList.vocValue = vocValue
+            }
+            list.add(addList)
+        }
+        return list
+    }
+
+
+    fun getApcdValues(linearLayout: LinearLayoutCompat) : String {
+
+
+        val list = mutableListOf<ApcdValues>()
+        list.clear()
+        for (i in 0 until linearLayout.childCount) {
+            /*Fetching data from multiple child views*/
+            var addList = ApcdValues()
+            val v: View = linearLayout.findViewById<LinearLayoutCompat>(R.id.apcdContainer).getChildAt(i)
+
+            val apcdType = v.findViewById<AppCompatSpinner>(R.id.apcd_type).selectedItem.toString()
+            val apcdOthers = v.findViewById<TextInputEditText>(R.id.apcd_type_others).text.toString()
+            val apcdEfficiency = v.findViewById<TextInputEditText>(R.id.txt_apcdEfficiency).text.toString()
+            if(apcdType.isNotEmpty() || apcdEfficiency.isNotEmpty()) {
+                addList.apcd = apcdType
+                addList.other_apcd = apcdOthers
+                addList.apsd_efficiency = apcdEfficiency
+            }
+            list.add(addList)
+        }
+        return Gson().toJson(list).toString()
+    }
+
+    fun setApcdValues(linearLayout: LinearLayoutCompat,arrayList: ArrayList<ApcdValues>){
+
+        for (i in 0 until arrayList.count()) {
+            Log.wtf("something here", arrayList[0].apcd)
+            val inflater: LayoutInflater = LayoutInflater.from(context)
+            val view: View = inflater.inflate(R.layout.apcd_details_entry, linearLayout, false)
+
+            val spinnerApcd = view.findViewById<AppCompatSpinner>(R.id.apcd_type)
+            val apcdOthers = view.findViewById<TextInputEditText>(R.id.apcd_type_others)
+            val layoutApcdOthers = view.findViewById<LinearLayoutCompat>(R.id.layout_apcd_others)
+            val textApcd =
+                view.findViewById<TextInputEditText>(R.id.txt_apcdEfficiency)
+
+            setSpinnerValues(
+                view,
+                R.id.apcd_type,
+                SpinnerEnum.FROM_RESOURCE_XML,
+                resources.getStringArray(R.array.apcdType),
+                arrayList[i].apcd.toString()
+            )
+//            textApcd.setText(arrayList[0].apsd_efficiency)
+
+        }
+//        val inflater: LayoutInflater = LayoutInflater.from(context)
+//        val view: View = inflater.inflate(R.layout.apcd_details_entry, apcd, false)
+//        val spinnerApcd = view.findViewById<AppCompatSpinner>(R.id.apcd_type)
+//        val apcdOthers = view.findViewById<TextInputEditText>(R.id.apcd_type_others)
+//        val layoutApcdOthers = view.findViewById<LinearLayoutCompat>(R.id.layout_apcd_others)
+//        val textApcd =
+//            view.findViewById<TextInputEditText>(R.id.txt_apcdEfficiency)
+//
+//        textApcd.setText(sList[0].apsd_efficiency)
+//        setSpinnerValues(
+//            view,
+//            R.id.apcd_type,
+//            SpinnerEnum.FROM_RESOURCE_XML,
+//            resources.getStringArray(R.array.apcdType),
+//            sList[i].apcd.toString()
+//        )
     }
 
     fun setSources(sourceInputs: MutableList<Pair<Int,MutableList<View>>>,sourceList: List<AreaModel>){
@@ -624,7 +927,258 @@ open class BaseFragment: Fragment() {
 
                 }
         }
+
     }
+
+    fun setPLants(plantsInputs: MutableList<Pair<Int,MutableList<View>>>,plantsList: List<PlantModel>) {
+
+        plantsInputs.forEachIndexed { index, it ->
+            if (index >= plantsList.size)
+                return@forEachIndexed
+
+            val value1 = it.second[0].findViewById<TextInputEditText>(R.id.txt_plantName)
+            val value2 = it.second[1].findViewById<TextInputEditText>(R.id.txt_plantAddress)
+            var lin = it.second[2].findViewById<LinearLayoutCompat>(R.id.apsiContainer)
+
+
+//            setSpinnerValues(it.second[0],R.id.source_type,SpinnerEnum.FROM_RESOURCE_XML,resources.getStringArray(R.array.typeSourceLists),
+//                sourceList[index].typeSource!!
+//            )
+            value1.setText(plantsList[index].plantName)
+            value2.setText(plantsList[index].plantAddress)
+            setApsi(lin,plantsList[index].apsi)
+        }
+    }
+
+    fun setApsi(lin: LinearLayoutCompat,apsi: List<ApsiModel>) {
+        if (apsi.isNotEmpty()) {
+            apsi.forEachIndexed { index, it ->
+                val apcdInputs = mutableListOf<Pair<View, View>>()
+                val inflater: LayoutInflater = LayoutInflater.from(context)
+                val view: View = inflater.inflate(R.layout.apsi_details_entry, lin, false)
+                val buttonDelete = view.findViewById<AppCompatButton>(R.id.btn_delete)
+                val tx_apsi = view.findViewById<TextView>(R.id.tx_apsi)
+                var linearApcd: LinearLayoutCompat = view.findViewById(R.id.apcdContainer)
+                val btn_addApcd = view.findViewById<TextView>(R.id.btn_addApcd)
+                lin.addView(view)
+                tx_apsi.setText("Apsi ${lin.childCount} Details")
+                btn_addApcd.setOnClickListener {
+                    this.addApcd(inflater, linearApcd, apcdInputs)
+                }
+                buttonDelete.setOnClickListener {
+                    lin.removeView(view)
+                }
+                val spinnerApsi = view.findViewById<AppCompatSpinner>(R.id.spinner_apsiType)
+                val layoutApsiOthers =
+                    view.findViewById<LinearLayoutCompat>(R.id.layout_apsi_others)
+                val layoutUnitOthers = view.findViewById<TextInputLayout>(R.id.apsiUnitLayout)
+                val spinnerFuel = view.findViewById<AppCompatSpinner>(R.id.spinner_fuelType)
+                val layoutFuelOthers =
+                    view.findViewById<LinearLayoutCompat>(R.id.layout_fuel_others)
+                val apsiOthers = view.findViewById<TextInputEditText>(R.id.apsi_type_others)
+                val apsiUnitOthers = view.findViewById<TextInputEditText>(R.id.txt_apsiUnitOthers)
+                val apsiCapacity = view.findViewById<TextInputEditText>(R.id.apsi_capacity)
+                val utmEasting = view.findViewById<TextInputEditText>(R.id.txt_utmEasting)
+                val utmNorthing = view.findViewById<TextInputEditText>(R.id.txt_utmNorthing)
+                val fuelOthers = view.findViewById<TextInputEditText>(R.id.fuel_type_others)
+                val fuelRate = view.findViewById<TextInputEditText>(R.id.txt_fuelRate)
+                val fuelConsumption =
+                    view.findViewById<TextInputEditText>(R.id.txt_fuelConsumption)
+                val operatingHours = view.findViewById<TextInputEditText>(R.id.txt_operatingHours)
+                val coValue = view.findViewById<TextInputEditText>(R.id.txt_co)
+                val noxValue = view.findViewById<TextInputEditText>(R.id.txt_nox)
+                val pmValue = view.findViewById<TextInputEditText>(R.id.txt_pm)
+                val soxValue = view.findViewById<TextInputEditText>(R.id.txt_sox)
+                val vocValue = view.findViewById<TextInputEditText>(R.id.txt_voc)
+                val apcd = view.findViewById<LinearLayoutCompat>(R.id.apcdContainer)
+                apsiOthers.setText(it.otherApsi)
+                apsiUnitOthers.setText(it.apsiUnit)
+                apsiCapacity.setText(it.apsiCapacity)
+                utmEasting.setText(it.utmEasting)
+                utmNorthing.setText(it.utmNorthing)
+                fuelOthers.setText(it.otherFuel)
+                fuelRate.setText(it.fuelRate)
+                fuelConsumption.setText(it.fuelUsed)
+                operatingHours.setText(it.operatingHours)
+                coValue.setText(it.coValue)
+                noxValue.setText(it.noxValue)
+                pmValue.setText(it.pmValue)
+                soxValue.setText(it.soxValue)
+                vocValue.setText(it.vocValue)
+                Log.wtf("type", it.apsiType.toString())
+                when {
+                    it.apsiType.toString() == "boiler_hp" -> {
+                        Log.wtf("type", "trueB")
+                        setSpinnerValues(
+                            view,
+                            R.id.spinner_apsiType,
+                            SpinnerEnum.FROM_RESOURCE_XML,
+                            resources.getStringArray(R.array.apsiType),
+                            "Boiler"
+                        )
+                    }
+                    it.apsiType.toString() == "generator_kw" -> {
+                        Log.wtf("type", "trueG")
+                        setSpinnerValues(
+                            view,
+                            R.id.spinner_apsiType,
+                            SpinnerEnum.FROM_RESOURCE_XML,
+                            resources.getStringArray(R.array.apsiType),
+                            "Generator"
+                        )
+                    }
+                    else -> {
+                        setSpinnerValues(
+                            view,
+                            R.id.spinner_apsiType,
+                            SpinnerEnum.FROM_RESOURCE_XML,
+                            resources.getStringArray(R.array.apsiType),
+                            "Others"
+                        )
+                    }
+                }
+                view.findViewById<TextView>(R.id.btn_deleteApsiOthers).setOnClickListener {
+                    spinnerApsi.visibility = View.VISIBLE
+                    layoutApsiOthers.visibility = View.GONE
+                    layoutUnitOthers.visibility = View.GONE
+
+                }
+                view.findViewById<TextView>(R.id.btn_deleteFuelOthers).setOnClickListener {
+                    spinnerFuel.visibility = View.VISIBLE
+                    layoutFuelOthers.visibility = View.GONE
+                }
+                spinnerApsi.let {
+                    it.onItemSelectedListener = object :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val checkApsi = parent?.getItemAtPosition(position).toString()
+                            if (checkApsi == "Others") {
+                                layoutApsiOthers.visibility = View.VISIBLE
+                                layoutUnitOthers.visibility = View.VISIBLE
+                            } else {
+                                layoutApsiOthers.visibility = View.GONE
+                                layoutUnitOthers.visibility = View.GONE
+                            }
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }
+                }
+                setSpinnerValues(
+                    view,
+                    R.id.spinner_fuelType,
+                    SpinnerEnum.FROM_RESOURCE_XML,
+                    resources.getStringArray(R.array.fuelType),
+                    it.fuelType.toString()
+                )
+                spinnerFuel.let {
+                    it.onItemSelectedListener = object :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            val checkApsi = parent?.getItemAtPosition(position).toString()
+                            if (checkApsi == "Others") {
+                                spinnerFuel.visibility = View.GONE
+                                layoutFuelOthers.visibility = View.VISIBLE
+                            } else {
+                                spinnerFuel.visibility = View.VISIBLE
+                                layoutFuelOthers.visibility = View.GONE
+                            }
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            TODO("Not yet implemented")
+                        }
+
+                    }
+                }
+                setSpinnerValues(
+                    view,
+                    R.id.spinner_fuelUnit,
+                    SpinnerEnum.FROM_RESOURCE_XML,
+                    resources.getStringArray(R.array.unitType),
+                    it.fuelUnit.toString()
+                )
+
+                val apcdList: Type = object : TypeToken<ArrayList<ApcdValues?>?>() {}.type
+
+                val sList: ArrayList<ApcdValues> = Gson().fromJson(it.apcd, apcdList)
+                if (sList.isNotEmpty()) {
+                    sList.forEachIndexed { index, it ->
+                        val inflater: LayoutInflater = LayoutInflater.from(context)
+                        val v: View =
+                            inflater.inflate(R.layout.apcd_details_entry, apcd, false)
+                        val buttonDelete = v.findViewById<TextView>(R.id.txt_delete)
+                        val spinnerApcd = v.findViewById<AppCompatSpinner>(R.id.apcd_type)
+                        val apcdOthers = v.findViewById<TextInputEditText>(R.id.apcd_type_others)
+                        val layoutApcdOthers =
+                            v.findViewById<LinearLayoutCompat>(R.id.layout_apcd_others)
+                        val textApcd =
+                            v.findViewById<TextInputEditText>(R.id.txt_apcdEfficiency)
+
+                        textApcd.setText(sList[index].apsd_efficiency)
+                        setSpinnerValues(
+                            v,
+                            R.id.apcd_type,
+                            SpinnerEnum.FROM_RESOURCE_XML,
+                            resources.getStringArray(R.array.apcdType),
+                            sList[index].apcd.toString()
+                        )
+                        spinnerApcd.let {
+                            it.onItemSelectedListener = object :
+                                AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    val checkApsi =
+                                        parent?.getItemAtPosition(position).toString()
+                                    if (checkApsi == "Others") {
+                                        apcdOthers.setText(sList[index].other_apcd)
+                                        spinnerApcd.visibility = View.GONE
+                                        layoutApcdOthers.visibility = View.VISIBLE
+                                    } else {
+                                        spinnerApcd.visibility = View.VISIBLE
+                                        layoutApcdOthers.visibility = View.GONE
+                                    }
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            }
+                        }
+                        lin.addView(v)
+                        buttonDelete.setOnClickListener {
+                            lin.removeView(v)
+                        }
+                        v.findViewById<TextView>(R.id.btn_deleteApcdOthers).setOnClickListener {
+                            spinnerApcd.visibility = View.VISIBLE
+                            layoutApcdOthers.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+//
+
+        }
+    }
+
 
     protected val getGeneralInformationMobile: MobileGeneral by lazy {
         val activity = requireActivity() as BaseActivity
@@ -636,6 +1190,11 @@ open class BaseFragment: Fragment() {
         activity.getGeneralInfoArea()
     }
 
+    protected val getGeneralInformationStationary: StationaryGeneral by lazy {
+        val activity = requireActivity() as BaseActivity
+        activity.getGeneralInfoStationary()
+    }
+
     protected val getVehicleRequest: MutableList<VehicleRequest> by lazy {
         val activity = requireActivity()
         (activity as MobileFormEdit).vehicleRequest
@@ -644,5 +1203,10 @@ open class BaseFragment: Fragment() {
     protected val getSourceRequest: MutableList<SourceRequest> by lazy {
         val activity = requireActivity()
         (activity as AreaFormEdit).sourceRequest
+    }
+
+    protected val getPlantRequest: MutableList<PlantRequest> by lazy {
+        val activity = requireActivity()
+        (activity as StationaryFormEdit).plantRequest
     }
 }

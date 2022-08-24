@@ -47,6 +47,7 @@ class AreaActivity : BaseActivity(), OnApiRequestListener {
 
     private fun initFunctions() {
         srlArea.setOnRefreshListener {
+            getAreaList()
             initAreaList()
         }
         findViewById<AppCompatImageButton>(R.id.btn_back).setOnClickListener{

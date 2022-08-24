@@ -47,6 +47,7 @@ class MobileActivity : BaseActivity(), OnApiRequestListener {
 
     private fun initFunctions() {
         srlMobile.setOnRefreshListener {
+            getMobileList()
             initMobileList()
         }
         findViewById<AppCompatImageButton>(R.id.btn_back).setOnClickListener{

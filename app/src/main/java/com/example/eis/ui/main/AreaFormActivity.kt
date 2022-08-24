@@ -104,12 +104,6 @@ class AreaFormActivity : BaseActivity() , OnApiRequestListener{
             }
             else {
                 firstFragment.getValues()
-//                generalInformationArea.areas.forEach {
-//                    it.sourceId?.let { id ->
-//                        if (id.isNotBlank())
-//                            apiRequest.deleteVehicle(id.toInt())
-//                    }
-//                }
                 apiRequest.addAreaGeneral(generalInformationArea)
                 //TODO API IMPLEMENTATION
             }

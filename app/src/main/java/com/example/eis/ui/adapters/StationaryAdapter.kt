@@ -18,9 +18,10 @@ class StationaryAdapter(private val context: Context,
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val cvStationary: MaterialCardView = itemView.findViewById(R.id.cv_stationary)
         val tvCompany: TextView = itemView.findViewById(R.id.rowCompany)
-        val tvYear: TextView = itemView.findViewById(R.id.rowYear)
         val tvCity: TextView = itemView.findViewById(R.id.rowCity)
+        val tvProvince: TextView = itemView.findViewById(R.id.rowProvince)
         val tvStatus: TextView = itemView.findViewById(R.id.rowStatus)
+        val tvCount: TextView = itemView.findViewById(R.id.rowCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,9 +32,10 @@ class StationaryAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val stationary = stationary[position]
         holder.tvCompany.text = stationary.company
-        holder.tvYear.text = stationary.year
         holder.tvCity.text = stationary.city
+        holder.tvProvince.text = stationary.province
         holder.tvStatus.text = stationary.status
+        holder.tvCount.text = stationary.count
         holder.cvStationary.setOnClickListener{
             stationaryListener.onStationarySelected(stationary)
         }
