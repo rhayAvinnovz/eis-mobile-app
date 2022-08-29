@@ -931,7 +931,7 @@ open class BaseFragment: Fragment() {
     }
 
     fun setPLants(plantsInputs: MutableList<Pair<Int,MutableList<View>>>,plantsList: List<PlantModel>) {
-
+//        val inflater: LayoutInflater = LayoutInflater.from(context)
         plantsInputs.forEachIndexed { index, it ->
             if (index >= plantsList.size)
                 return@forEachIndexed
@@ -944,22 +944,28 @@ open class BaseFragment: Fragment() {
 //            setSpinnerValues(it.second[0],R.id.source_type,SpinnerEnum.FROM_RESOURCE_XML,resources.getStringArray(R.array.typeSourceLists),
 //                sourceList[index].typeSource!!
 //            )
+//            val apsiInputs = mutableListOf<View>()
             value1.setText(plantsList[index].plantName)
             value2.setText(plantsList[index].plantAddress)
-            setApsi(lin,plantsList[index].apsi)
+            plantsList[index].apsi.forEach { _ ->
+                setApsi(lin,plantsList[index].apsi)
+            }
+//            setApsi(lin,plantsList[index].apsi)
         }
     }
 
     fun setApsi(lin: LinearLayoutCompat,apsi: List<ApsiModel>) {
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val view: View = inflater.inflate(R.layout.apsi_details_entry, lin, false)
         if (apsi.isNotEmpty()) {
             apsi.forEachIndexed { index, it ->
                 val apcdInputs = mutableListOf<Pair<View, View>>()
-                val inflater: LayoutInflater = LayoutInflater.from(context)
-                val view: View = inflater.inflate(R.layout.apsi_details_entry, lin, false)
+
                 val buttonDelete = view.findViewById<AppCompatButton>(R.id.btn_delete)
                 val tx_apsi = view.findViewById<TextView>(R.id.tx_apsi)
                 var linearApcd: LinearLayoutCompat = view.findViewById(R.id.apcdContainer)
                 val btn_addApcd = view.findViewById<TextView>(R.id.btn_addApcd)
+
                 lin.addView(view)
                 tx_apsi.setText("Apsi ${lin.childCount} Details")
                 btn_addApcd.setOnClickListener {
@@ -1163,9 +1169,9 @@ open class BaseFragment: Fragment() {
 
                             }
                         }
-                        lin.addView(v)
+                        apcd.addView(v)
                         buttonDelete.setOnClickListener {
-                            lin.removeView(v)
+                            apcd.removeView(v)
                         }
                         v.findViewById<TextView>(R.id.btn_deleteApcdOthers).setOnClickListener {
                             spinnerApcd.visibility = View.VISIBLE
