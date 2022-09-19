@@ -45,7 +45,6 @@ class StationaryFirstFragment: BaseFragment() {
         resindustry = String()
         resindustryOthers= String()
         initFields()
-
         spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -92,6 +91,7 @@ class StationaryFirstFragment: BaseFragment() {
 
 
                 }
+                checkProvince()
                 getCity()
             }
 
@@ -122,6 +122,7 @@ class StationaryFirstFragment: BaseFragment() {
     }
     fun getValues(){
         initFields()
+        getCity()
         getGeneralInformationStationary.userId = PrefsUtil.getUser(requireContext())?.userId
         getGeneralInformationStationary.userName = PrefsUtil.getUser(requireContext())?.username
         getGeneralInformationStationary.year = getValue(rootView,R.id.txt_year)
@@ -167,6 +168,7 @@ class StationaryFirstFragment: BaseFragment() {
         /*on select function end*/
     }
     fun checkProvince(): Spinner {
+//        Log.wtf("checkcity",getGeneralInformationStationary.city.toString())
 
         spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -214,8 +216,8 @@ class StationaryFirstFragment: BaseFragment() {
 
 
                 }
-                if(list.contains(getGeneralInformationArea.city.toString())){
-                    spinnerCity.setSelection(list.indexOf(getGeneralInformationArea.city))
+                if(list.contains(getGeneralInformationStationary.city.toString())){
+                    spinnerCity.setSelection(list.indexOf(getGeneralInformationStationary.city.toString()))
                 }else{
                     spinnerCity.setSelection(0)
                 }
